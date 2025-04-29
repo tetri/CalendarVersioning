@@ -1,0 +1,88 @@
+## Arquivo .gitignore para projeto CalendarVersioning C#
+
+# Diretórios de build e publicação
+bin/
+obj/
+out/
+publish/
+artifacts/
+
+# Arquivos do usuário
+*.user
+*.suo
+*.userprefs
+
+# Arquivos de IDE
+.vs/
+.vscode/
+.idea/
+*.swp
+
+# Arquivos de projeto
+*.DotSettings
+
+# Test results
+TestResults/
+*.trx
+*.coverage
+coverage*.xml
+*.coverage
+
+# Pacotes NuGet
+*.nupkg
+!**/packages/*.nupkg
+packages/
+
+# Ferramentas locais
+.dotnet/
+tools/
+
+# Arquivos temporários
+*.tmp
+*.temp
+*.log
+*.tlog
+
+# VS Code
+.history/
+
+# Rider
+.idea/
+*.sln.iml
+
+# MacOS
+.DS_Store
+
+# VS 2017+
+.vs/
+*.binlog
+
+# Resharper
+_ReSharper.*
+*.ReSharper
+
+# Azure Functions
+func/
+
+# MSTest
+*.TestStore
+
+# DotCover
+*.dotCover
+
+# Node.js
+node_modules/
+npm-debug.log
+
+# VS Code - ESLint
+.eslintcache
+
+# CodeRush
+.cr/
+
+# Python
+__pycache__/
+*.pyc
+
+# JetBrains Rider
+.idea

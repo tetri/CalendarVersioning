@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<LangVersion>10.0</LangVersion>
+		<TargetFramework>net9.0</TargetFramework>
+		<PackageId>tetri.net.CalendarVersioning</PackageId>
+		<Version>0.0.2</Version>
+		<Authors>Tetri Mesquita</Authors>
+		<Description>Implementação de versionamento semântico (SemVer 2.0.0) em C# com suporte a parsing, comparação e operadores.</Description>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageProjectUrl>https://github.com/tetri/CalendarVersioning</PackageProjectUrl>
+		<RepositoryType>git</RepositoryType>
+		<RepositoryUrl>https://github.com/tetri/CalendarVersioning.git</RepositoryUrl>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<PackageTags>semver versioning semantic-version</PackageTags>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<MinVerTagPrefix>v</MinVerTagPrefix>
+		<RestorePackagesDuringBuild>true</RestorePackagesDuringBuild>
+		<PackageIcon>logo.png</PackageIcon>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="..\..\README.md" Pack="true" PackagePath="\" />
+		<None Include="..\..\logo.png" Pack="true" PackagePath="\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="System.Text.Json" Version="9.0.3" />
+		<PackageReference Include="MinVer" Version="6.0.0" PrivateAssets="all" />
+	</ItemGroup>
+</Project>

@@ -1,0 +1,12 @@
+image: Visual Studio 2022
+
+build_script:
+  - dotnet restore
+  - dotnet build -c Release
+
+test_script:
+  - dotnet test
+
+artifacts:
+  - path: '**/bin/Release/**/*.dll'
+    name: CalendarVersioning-Binaries
