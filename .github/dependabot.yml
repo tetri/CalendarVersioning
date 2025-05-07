@@ -1,26 +1,25 @@
 version: 2
 updates:
-  - package-ecosystem: "nuget"       # Foco em pacotes .NET
-    directory: "/"                   # Raiz do repositório
+  - package-ecosystem: "nuget"
+    directory: "/"
     schedule:
-      interval: "weekly"             # Verificação semanal
-      day: "monday"                  # Toda segunda-feira
-      time: "09:00"                  # Horário de verificação (UTC)
-      timezone: "America/Sao_Paulo"  # Fuso horário (opcional)
-    open-pull-requests-limit: 5      # Máximo de 5 PRs simultâneos
-    target-branch: "main"            # Branch base
-    versioning-strategy: "increase"  # Só atualiza para versões superiores
-    reviewers:                       # Revisores designados
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/Sao_Paulo"
+    open-pull-requests-limit: 5
+    target-branch: "main"
+    reviewers:
       - "tetri"
-    assignees:                       # Responsáveis
+    assignees:
       - "tetri"
-    labels:                          # Labels automáticas
+    labels:
       - "dependencies"
       - "automated"
       - "nuget"
-    commit-message:                  # Padrão de commits
+    commit-message:
       prefix: "chore"               
-      include: "scope"              # Inclui o nome do pacote atualizado
-    ignore:                          # Pacotes para ignorar
+      include: "scope"
+    ignore:
       - dependency-name: "Microsoft.NET.Test.Sdk"
-        versions: ["*"]             # Ignora todas as versões
+        versions: ["*"]
