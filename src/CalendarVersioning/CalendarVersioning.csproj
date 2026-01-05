@@ -28,6 +28,6 @@
 
 	<ItemGroup>
 		<PackageReference Include="System.Text.Json" Version="10.0.1" />
-		<PackageReference Include="MinVer" Version="6.1.0" PrivateAssets="all" />
+		<PackageReference Include="MinVer" Version="7.0.0" PrivateAssets="all" />
 	</ItemGroup>
 </Project>
