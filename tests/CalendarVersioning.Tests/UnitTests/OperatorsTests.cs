@@ -25,6 +25,25 @@ namespace CalendarVersioning.Tests.UnitTests
             Assert.True(older <= newer);
             Assert.True(newer >= older);
         }
+
+        [Fact]
+        public void Operators_WithNulls_ShouldBeConsistent()
+        {
+            CalendarVersion? left = null;
+            CalendarVersion? right = CalendarVersion.Parse("2025.04");
+
+            Assert.True(left == null);
+            Assert.False(left != null);
+
+            Assert.True(left < right);
+            Assert.False(left > right);
+
+            Assert.True(left <= right);
+            Assert.False(left >= right);
+
+            Assert.False(right <= left);
+            Assert.True(right >= left);
+        }
     }
 
 }

@@ -19,7 +19,7 @@ dotnet add package tetri.net.CalendarVersioning
 Or add directly to your `.csproj`:
 
 ```xml
-<PackageReference Include="tetri.net.CalendarVersioning" Version="1.0.0" />
+<PackageReference Include="tetri.net.CalendarVersioning" Version="0.0.4" />
 ```
 
 ## 🚀 Quick Start

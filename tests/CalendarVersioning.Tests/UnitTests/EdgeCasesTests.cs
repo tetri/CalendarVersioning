@@ -35,6 +35,40 @@ namespace CalendarVersioning.Tests.UnitTests
             var version = CalendarVersion.Parse("2025.04.01.0");
             Assert.Equal(0, version.Minor);
         }
+
+        [Fact]
+        public void ToString_DefaultFormat_YearMonth_ShouldPad()
+        {
+            var version = new CalendarVersion(2025, 4);
+            Assert.Equal("2025.04", version.ToString());
+        }
+
+        [Fact]
+        public void ToString_DefaultFormat_YearMonthDay_ShouldPad()
+        {
+            var version = new CalendarVersion(2025, 4, day: 1);
+            Assert.Equal("2025.04.01", version.ToString());
+        }
+
+        [Fact]
+        public void ToString_DefaultFormat_YearMonthDayMinor_ShouldWork()
+        {
+            var version = new CalendarVersion(2025, 4, day: 1, minor: 7);
+            Assert.Equal("2025.04.01.7", version.ToString());
+        }
+
+        [Fact]
+        public void ToString_DefaultFormat_MinorWithoutDay_ShouldThrow()
+        {
+            var ex = Assert.Throws<ArgumentException>(() => new CalendarVersion(2025, 4, day: null, minor: 1));
+            Assert.Contains("Minor requires Day", ex.Message);
+        }
+
+        [Fact]
+        public void Constructor_NegativeMinor_ShouldThrowOutOfRange()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => new CalendarVersion(2025, 4, day: 1, minor: -1));
+        }
     }
 
 }

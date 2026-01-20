@@ -16,6 +16,8 @@ namespace CalendarVersioning
 
         public CalendarVersion(int year, int month, int? day = null, int? minor = null, CalendarVersionFormat? format = null)
         {
+            Validate(year, month, day, minor, format);
+
             Year = year;
             Month = month;
             Day = day;
@@ -36,6 +38,9 @@ namespace CalendarVersioning
             if (format == null)
             {
                 // Default parsing: YYYY.MM[.DD[.Minor]]
+                if (parts.Length is < 2 or > 4)
+                    throw new FormatException($"Version string '{input}' does not match default format 'YYYY.MM[.DD[.Minor]]'");
+
                 year = int.Parse(parts[0]);
                 month = int.Parse(parts[1]);
                 day = parts.Length > 2 ? int.Parse(parts[2]) : null;
@@ -61,6 +66,8 @@ namespace CalendarVersioning
                         year = value;
                         break;
                     case "YY":
+                        if (value is < 0 or > 99)
+                            throw new FormatException($"Invalid YY value '{parts[i]}' in version string '{input}'");
                         year = 2000 + value;
                         break;
                     case "MM":
@@ -91,7 +98,7 @@ namespace CalendarVersioning
             else if (Day.HasValue)
                 return $"{Year:D4}.{Month:D2}.{Day.Value:D2}";
             else if (Minor.HasValue)
-                return $"{Year:D4}.{Month:D2}.{Minor.Value}";
+                throw new InvalidOperationException("Minor cannot be formatted without Day using the default format. Provide a CalendarVersionFormat (e.g. 'YYYY.MM.Minor') or include Day.");
             else
                 return $"{Year:D4}.{Month:D2}";
         }
@@ -133,17 +140,60 @@ namespace CalendarVersioning
         public static bool operator !=(CalendarVersion? left, CalendarVersion? right) =>
             !Equals(left, right);
 
-        public static bool operator <(CalendarVersion? left, CalendarVersion? right) =>
-            left is not null && left.CompareTo(right) < 0;
+        public static bool operator <(CalendarVersion? left, CalendarVersion? right)
+        {
+            if (ReferenceEquals(left, right)) return false;
+            if (left is null) return right is not null;
+            if (right is null) return false;
+            return left.CompareTo(right) < 0;
+        }
 
-        public static bool operator >(CalendarVersion? left, CalendarVersion? right) =>
-            left is not null && left.CompareTo(right) > 0;
+        public static bool operator >(CalendarVersion? left, CalendarVersion? right)
+        {
+            if (ReferenceEquals(left, right)) return false;
+            if (right is null) return left is not null;
+            if (left is null) return false;
+            return left.CompareTo(right) > 0;
+        }
 
-        public static bool operator <=(CalendarVersion? left, CalendarVersion? right) =>
-            left is null || left.CompareTo(right) <= 0;
+        public static bool operator <=(CalendarVersion? left, CalendarVersion? right)
+        {
+            if (ReferenceEquals(left, right)) return true;
+            if (left is null) return true;
+            if (right is null) return false;
+            return left.CompareTo(right) <= 0;
+        }
 
-        public static bool operator >=(CalendarVersion? left, CalendarVersion? right) =>
-            left is null || left.CompareTo(right) >= 0;
+        public static bool operator >=(CalendarVersion? left, CalendarVersion? right)
+        {
+            if (ReferenceEquals(left, right)) return true;
+            if (right is null) return true;
+            if (left is null) return false;
+            return left.CompareTo(right) >= 0;
+        }
+
+        private static void Validate(int year, int month, int? day, int? minor, CalendarVersionFormat? format)
+        {
+            if (year < 0 || year > 9999)
+                throw new ArgumentOutOfRangeException(nameof(year), year, "Year must be between 0 and 9999.");
+
+            if (month < 1 || month > 12)
+                throw new ArgumentOutOfRangeException(nameof(month), month, "Month must be between 1 and 12.");
+
+            if (day.HasValue)
+            {
+                int maxDay = DateTime.DaysInMonth(year == 0 ? 1 : year, month);
+                if (day.Value < 1 || day.Value > maxDay)
+                    throw new ArgumentOutOfRangeException(nameof(day), day, $"Day must be between 1 and {maxDay} for {year:D4}-{month:D2}.");
+            }
+
+            if (minor.HasValue && minor.Value < 0)
+                throw new ArgumentOutOfRangeException(nameof(minor), minor, "Minor must be >= 0.");
+
+            // Default ToString / default Parse are ambiguous for Minor without Day.
+            if (minor.HasValue && !day.HasValue && format is null)
+                throw new ArgumentException("Minor requires Day when no format is provided (default format is YYYY.MM[.DD[.Minor]]).");
+        }
     }
 
 
@@ -160,6 +210,12 @@ namespace CalendarVersioning
 
         public override CalendarVersion? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
+            if (reader.TokenType == JsonTokenType.Null)
+                return null;
+
+            if (reader.TokenType != JsonTokenType.String)
+                throw new JsonException($"Expected JSON string or null when deserializing {nameof(CalendarVersion)}.");
+
             var stringValue = reader.GetString();
             if (string.IsNullOrWhiteSpace(stringValue))
                 return null;

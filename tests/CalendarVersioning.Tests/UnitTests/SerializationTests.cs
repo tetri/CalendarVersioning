@@ -24,5 +24,25 @@ namespace CalendarVersioning.Tests.UnitTests
 
             Assert.Throws<FormatException>(() => JsonSerializer.Deserialize<CalendarVersion>(json));
         }
+
+        [Fact]
+        public void Deserialize_Null_ShouldReturnNull()
+        {
+            CalendarVersion? version = JsonSerializer.Deserialize<CalendarVersion>("null");
+            Assert.Null(version);
+        }
+
+        [Fact]
+        public void Deserialize_WhitespaceString_ShouldReturnNull()
+        {
+            CalendarVersion? version = JsonSerializer.Deserialize<CalendarVersion>("\"   \"");
+            Assert.Null(version);
+        }
+
+        [Fact]
+        public void Deserialize_NonStringToken_ShouldThrowJsonException()
+        {
+            Assert.Throws<JsonException>(() => JsonSerializer.Deserialize<CalendarVersion>("123"));
+        }
     }
 }
