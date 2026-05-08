@@ -4,8 +4,15 @@ using System.Text.Json.Serialization;
 
 namespace CalendarVersioning
 {
+#if NET7_0_OR_GREATER
+    using System.Diagnostics.CodeAnalysis;
+#endif
+
     [JsonConverter(typeof(CalendarVersionConverter))]
     public sealed class CalendarVersion : IComparable<CalendarVersion>
+#if NET7_0_OR_GREATER
+        , IParsable<CalendarVersion>
+#endif
     {
         public int Year { get; }
         public int Month { get; }
@@ -24,6 +31,18 @@ namespace CalendarVersioning
             Minor = minor;
             Format = format;
         }
+
+#if NET7_0_OR_GREATER
+        public static CalendarVersion Parse(string input, IFormatProvider? provider)
+        {
+            return Parse(input, format: null);
+        }
+
+        public static bool TryParse([NotNullWhen(true)] string? input, IFormatProvider? provider, [MaybeNullWhen(false)] out CalendarVersion result)
+        {
+            return TryParse(input, out result);
+        }
+#endif
 
         public static CalendarVersion Parse(string input, CalendarVersionFormat? format = null)
         {
@@ -85,6 +104,32 @@ namespace CalendarVersioning
             }
 
             return new CalendarVersion(year, month, day, minor, format);
+        }
+
+        public static bool TryParse(string? input, out CalendarVersion? result)
+        {
+            return TryParse(input, format: null, out result);
+        }
+
+        public static bool TryParse(string? input, CalendarVersionFormat? format, out CalendarVersion? result)
+        {
+            result = null;
+            if (string.IsNullOrWhiteSpace(input))
+                return false;
+
+            try
+            {
+                result = Parse(input, format);
+                return true;
+            }
+            catch (FormatException)
+            {
+                return false;
+            }
+            catch (ArgumentException)
+            {
+                return false;
+            }
         }
 
         public override string ToString()
