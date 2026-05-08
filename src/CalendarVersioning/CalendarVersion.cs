@@ -30,13 +30,16 @@ namespace CalendarVersioning
             if (string.IsNullOrWhiteSpace(input))
                 throw new ArgumentException("Input cannot be null or empty", nameof(input));
 
+            if (input.Length > 256)
+                throw new ArgumentException("Input version string is too long", nameof(input));
 
             int year = 0, month = 0;
             int? day = null, minor = null;
 
-            var parts = input.Split('.');
             if (format == null)
             {
+                var parts = input.Split('.', 5);
+
                 // Default parsing: YYYY.MM[.DD[.Minor]]
                 if (parts.Length is < 2 or > 4)
                     throw new FormatException($"Version string '{input}' does not match default format 'YYYY.MM[.DD[.Minor]]'");
@@ -51,7 +54,9 @@ namespace CalendarVersioning
 
             // Parsing using the format
             string pattern = format.Pattern;
-            var tokens = pattern.Split('.');
+            var tokens = pattern.Split('.', 10);
+            var parts = input.Split('.', tokens.Length + 1);
+
             if (tokens.Length != parts.Length)
                 throw new FormatException($"Version string '{input}' does not match format '{pattern}'");
 
