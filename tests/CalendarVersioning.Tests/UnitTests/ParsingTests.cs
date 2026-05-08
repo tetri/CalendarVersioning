@@ -103,5 +103,27 @@ namespace CalendarVersioning.Tests.UnitTests
             var format = new CalendarVersionFormat("YY.MM");
             Assert.Throws<FormatException>(() => CalendarVersion.Parse("123.04", format));
         }
+
+        [Fact]
+        public void Parse_TooLongInput_ShouldThrowArgumentException()
+        {
+            string longInput = new string('a', 257);
+            Assert.Throws<ArgumentException>(() => CalendarVersion.Parse(longInput));
+        }
+
+        [Fact]
+        public void Parse_TooManyDots_ShouldThrowFormatException()
+        {
+            string inputWithManyDots = "2025.04.01.1.extra.dots"; // 6 parts
+            Assert.Throws<FormatException>(() => CalendarVersion.Parse(inputWithManyDots));
+        }
+
+        [Fact]
+        public void Parse_CustomFormat_TooManyDots_ShouldThrowFormatException()
+        {
+            var format = new CalendarVersionFormat("YYYY.MM");
+            string inputWithManyDots = "2025.04.01"; // 3 parts for 2 tokens
+            Assert.Throws<FormatException>(() => CalendarVersion.Parse(inputWithManyDots, format));
+        }
     }
 }
