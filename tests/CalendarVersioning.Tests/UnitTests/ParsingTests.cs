@@ -125,5 +125,59 @@ namespace CalendarVersioning.Tests.UnitTests
             string inputWithManyDots = "2025.04.01"; // 3 parts for 2 tokens
             Assert.Throws<FormatException>(() => CalendarVersion.Parse(inputWithManyDots, format));
         }
+      
+        [Theory]
+        [InlineData("2025.04.29.1", 2025, 4, 29, 1)]
+        [InlineData("2025.04", 2025, 4, null, null)]
+        public void TryParse_ValidInput_ShouldReturnTrueAndParsedVersion(string input, int year, int month, int? day, int? minor)
+        {
+            var success = CalendarVersion.TryParse(input, out var version);
+
+            Assert.True(success);
+            Assert.NotNull(version);
+            Assert.Equal(year, version.Year);
+            Assert.Equal(month, version.Month);
+            Assert.Equal(day, version.Day);
+            Assert.Equal(minor, version.Minor);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData("invalid")]
+        [InlineData("2025.13")]
+        [InlineData("2025.02.29")] // 2025 não é bissexto
+        [InlineData("2025.04.01.2.3")]
+        public void TryParse_InvalidInput_ShouldReturnFalse(string? input)
+        {
+            var success = CalendarVersion.TryParse(input, out var version);
+
+            Assert.False(success);
+            Assert.Null(version);
+        }
+
+        [Fact]
+        public void TryParse_WithValidCustomFormat_ShouldReturnTrue()
+        {
+            var format = new CalendarVersionFormat("YY.MM.Minor");
+            var success = CalendarVersion.TryParse("25.04.1", format, out var version);
+
+            Assert.True(success);
+            Assert.NotNull(version);
+            Assert.Equal(2025, version.Year);
+            Assert.Equal(4, version.Month);
+            Assert.Equal(1, version.Minor);
+        }
+
+        [Fact]
+        public void TryParse_WithInvalidCustomFormat_ShouldReturnFalse()
+        {
+            var format = new CalendarVersionFormat("YYYY.MM.DD");
+            var success = CalendarVersion.TryParse("2025.04", format, out var version); // missing DD component
+
+            Assert.False(success);
+            Assert.Null(version);
+        }
     }
 }
