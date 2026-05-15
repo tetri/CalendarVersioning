@@ -81,7 +81,7 @@ namespace CalendarVersioning
             for (int i = 0; i < tokens.Length; i++)
             {
                 var token = tokens[i];
-                var value = int.Parse(parts[i]);
+                var value = int.Parse(formatParts[i]);
 
                 switch (token)
                 {
@@ -90,7 +90,7 @@ namespace CalendarVersioning
                         break;
                     case "YY":
                         if (value is < 0 or > 99)
-                            throw new FormatException($"Invalid YY value '{parts[i]}' in version string '{input}'");
+                            throw new FormatException($"Invalid YY value '{formatParts[i]}' in version string '{input}'");
                         year = 2000 + value;
                         break;
                     case "MM":
