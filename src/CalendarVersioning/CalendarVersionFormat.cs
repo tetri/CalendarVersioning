@@ -5,10 +5,12 @@ namespace CalendarVersioning
     public sealed class CalendarVersionFormat
     {
         public string Pattern { get; }
+        internal string[] Tokens { get; }
 
         public CalendarVersionFormat(string pattern)
         {
             Pattern = pattern;
+            Tokens = pattern.Split('.', 10);
         }
 
         internal string Format(CalendarVersion version)
