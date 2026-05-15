@@ -72,12 +72,11 @@ namespace CalendarVersioning
             }
 
             // Parsing using the format
-            string pattern = format.Pattern;
-            var tokens = pattern.Split('.', 10);
-            var formatParts = input.Split('.', tokens.Length + 1);
+            var tokens = format.Tokens;
+            var parts = input.Split('.', tokens.Length + 1);
 
-            if (tokens.Length != formatParts.Length)
-                throw new FormatException($"Version string '{input}' does not match format '{pattern}'");
+            if (tokens.Length != parts.Length)
+                throw new FormatException($"Version string '{input}' does not match format '{format.Pattern}'");
 
             for (int i = 0; i < tokens.Length; i++)
             {
@@ -104,7 +103,7 @@ namespace CalendarVersioning
                         minor = value;
                         break;
                     default:
-                        throw new FormatException($"Unknown format token '{token}' in pattern '{pattern}'");
+                        throw new FormatException($"Unknown format token '{token}' in pattern '{format.Pattern}'");
                 }
             }
 
@@ -132,6 +131,10 @@ namespace CalendarVersioning
                 return false;
             }
             catch (ArgumentException)
+            {
+                return false;
+            }
+            catch (OverflowException)
             {
                 return false;
             }
