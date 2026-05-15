@@ -74,15 +74,15 @@ namespace CalendarVersioning
             // Parsing using the format
             string pattern = format.Pattern;
             var tokens = pattern.Split('.', 10);
-            var parts = input.Split('.', tokens.Length + 1);
+            var formatParts = input.Split('.', tokens.Length + 1);
 
-            if (tokens.Length != parts.Length)
+            if (tokens.Length != formatParts.Length)
                 throw new FormatException($"Version string '{input}' does not match format '{pattern}'");
 
             for (int i = 0; i < tokens.Length; i++)
             {
                 var token = tokens[i];
-                var value = int.Parse(parts[i]);
+                var value = int.Parse(formatParts[i]);
 
                 switch (token)
                 {
@@ -91,7 +91,7 @@ namespace CalendarVersioning
                         break;
                     case "YY":
                         if (value is < 0 or > 99)
-                            throw new FormatException($"Invalid YY value '{parts[i]}' in version string '{input}'");
+                            throw new FormatException($"Invalid YY value '{formatParts[i]}' in version string '{input}'");
                         year = 2000 + value;
                         break;
                     case "MM":
