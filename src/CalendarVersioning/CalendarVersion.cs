@@ -134,6 +134,10 @@ namespace CalendarVersioning
             {
                 return false;
             }
+            catch (OverflowException)
+            {
+                return false;
+            }
         }
 
         public override string ToString()
