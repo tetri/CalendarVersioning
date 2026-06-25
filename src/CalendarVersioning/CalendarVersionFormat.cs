@@ -13,7 +13,7 @@ namespace CalendarVersioning
             Tokens = pattern.Split('.', 10);
         }
 
-        internal string Format(CalendarVersion version)
+        public string Format(CalendarVersion version)
         {
             string result = Pattern;
 

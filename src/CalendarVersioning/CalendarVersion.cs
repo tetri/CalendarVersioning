@@ -73,9 +73,9 @@ namespace CalendarVersioning
 
             // Parsing using the format
             var tokens = format.Tokens;
-            var parts = input.Split('.', tokens.Length + 1);
+            var formatParts = input.Split('.', tokens.Length + 1);
 
-            if (tokens.Length != parts.Length)
+            if (tokens.Length != formatParts.Length)
                 throw new FormatException($"Version string '{input}' does not match format '{format.Pattern}'");
 
             for (int i = 0; i < tokens.Length; i++)
