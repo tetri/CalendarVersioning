@@ -6,90 +6,90 @@
 [![Github Build Status](https://img.shields.io/github/actions/workflow/status/tetri/CalendarVersioning/publish.yml?style=flat-square&logo=github)](https://github.com/tetri/CalendarVersioning/actions)
 [![AppVeyor Build Status](https://img.shields.io/appveyor/build/tetri/calendarversioning?style=flat-square&logo=appveyor)](https://ci.appveyor.com/project/tetri/calendarversioning)
 
-A robust [Calendar Versioning](https://calver.org/) implementation for .NET with full support for parsing, comparison, and format customization.
+Uma implementação robusta de [Calendar Versioning (CalVer)](https://calver.org/) para .NET com suporte completo a parsing, comparação e formatação personalizada.
 
-## 📦 Installation
+## 📦 Instalação
 
-Install via NuGet Package Manager:
+Instale via NuGet Package Manager:
 
 ```bash
 dotnet add package tetri.net.CalendarVersioning
 ```
 
-Or add directly to your `.csproj`:
+Ou adicione diretamente ao seu `.csproj`:
 
 ```xml
 <PackageReference Include="tetri.net.CalendarVersioning" Version="0.0.4" />
 ```
 
-## 🚀 Quick Start
+## 🚀 Início Rápido
 
-### Creating versions
+### Criando versões
 ```csharp
-// From string
+// A partir de uma string
 var version = CalendarVersion.Parse("2025.04.29");
 
-// With custom format (YY.MM.Minor)
+// Com formato personalizado (YY.MM.Minor)
 var format = new CalendarVersionFormat("YY.MM.Minor");
 var custom = CalendarVersion.Parse("25.04.1", format);
 
-// Using constructor
+// Usando o construtor
 var version = new CalendarVersion(year: 2025, month: 4, day: 29, minor: 1);
 ```
 
-### Comparing versions
+### Comparando versões
 ```csharp
 var v1 = CalendarVersion.Parse("2025.04");
 var v2 = CalendarVersion.Parse("2025.05");
 
 if (v1 < v2) 
 {
-    Console.WriteLine($"{v1} is earlier than {v2}");
+    Console.WriteLine($"{v1} é anterior a {v2}");
 }
 ```
 
-### Safe parsing (TryParse)
+### Parsing seguro (TryParse)
 ```csharp
 if (CalendarVersion.TryParse("2025.04.29", out var version))
 {
-    Console.WriteLine($"Parsed: {version}");
+    Console.WriteLine($"Parseado: {version}");
 }
 
-// With custom format
+// Com formato personalizado
 var format = new CalendarVersionFormat("YY.MM.DD");
 if (CalendarVersion.TryParse("25.04.29", format, out var custom))
 {
-    Console.WriteLine($"Parsed: {custom}");
+    Console.WriteLine($"Parseado: {custom}");
 }
 ```
 
-### Supported operations
+### Operações suportadas
 ```csharp
-// Equality
+// Igualdade
 bool equal = v1 == v2; 
 
-// Comparison
+// Comparação
 bool greater = v1 > v2;
 
-// Comparison methods
+// Métodos de comparação
 int result = v1.CompareTo(v2);
 ```
 
-## ✨ Features
+## ✨ Funcionalidades
 
-✅ Strict Calendar Version parsing with format validation  
-✅ Safe parsing via `TryParse` (no exceptions on invalid input)  
-✅ DoS protection: max 256 characters, limited number of components  
-✅ Full version comparison support  
-✅ Custom formats (`YYYY.MM`, `YY.MM.DD.Minor`, etc)  
-✅ Overloaded operators (==, !=, <, >, <=, >=)  
-✅ Immutable and thread-safe  
-✅ System.Text.Json serialization ready (via `CalendarVersionConverter`)  
-✅ Implements `IParsable<CalendarVersion>` (.NET 7+)  
+✅ Parsing estrito de versões Calendar com validação de formato  
+✅ Parsing seguro via `TryParse` (sem exceções em entradas inválidas)  
+✅ Proteção DoS: máximo de 256 caracteres, número limitado de componentes  
+✅ Suporte completo a comparação de versões  
+✅ Formatos personalizados (`YYYY.MM`, `YY.MM.DD.Minor`, etc)  
+✅ Operadores sobrecarregados (==, !=, <, >, <=, >=)  
+✅ Imutável e thread-safe  
+✅ Serialização System.Text.Json pronta (via `CalendarVersionConverter`)  
+✅ Implementa `IParsable<CalendarVersion>` (.NET 7+)  
 
-## 📚 Advanced Examples
+## 📚 Exemplos Avançados
 
-### Custom format parsing
+### Parsing com formato personalizado
 ```csharp
 var format = new CalendarVersionFormat("YYYY.MM.Minor");
 var version = CalendarVersion.Parse("2025.04.2", format);
@@ -99,7 +99,7 @@ Console.WriteLine(version.Month); // 4
 Console.WriteLine(version.Minor); // 2
 ```
 
-### Comparing detailed versions
+### Comparando versões detalhadas
 ```csharp
 var stable = CalendarVersion.Parse("2025.04.15");
 var hotfix = CalendarVersion.Parse("2025.04.15.1");
@@ -107,43 +107,43 @@ var hotfix = CalendarVersion.Parse("2025.04.15.1");
 Console.WriteLine(hotfix > stable); // True
 ```
 
-### JSON serialization
+### Serialização JSON
 ```csharp
-// Serialization works out of the box via the built-in JsonConverter
+// Serialização funciona diretamente via o JsonConverter embutido
 var version = CalendarVersion.Parse("2025.04.29");
 string json = JsonSerializer.Serialize(version);
 // "2025.04.29"
 
-// Deserialization
+// Desserialização
 var deserialized = JsonSerializer.Deserialize<CalendarVersion>("\"2025.04.29\"");
 ```
 
-### Security limits
+### Limites de segurança
 
-`CalendarVersion.Parse` enforces a maximum input length of 256 characters and limits the number of dot-separated components to prevent denial-of-service attacks via excessive memory allocation.
+O método `CalendarVersion.Parse` impõe um tamanho máximo de entrada de 256 caracteres e limita o número de componentes separados por ponto para prevenir ataques de negação de serviço via alocação excessiva de memória.
 
 ```csharp
-// Throws ArgumentException: input exceeds 256 characters
+// Lança ArgumentException: entrada excede 256 caracteres
 CalendarVersion.Parse(new string('a', 257));
 
-// Throws FormatException: too many components
+// Lança FormatException: muitos componentes
 CalendarVersion.Parse("2025.04.01.1.extra.dots");
 ```
 
-## 🤝 Contributing
+## 🤝 Contribuindo
 
-We welcome contributions! Please follow these steps:
+Aceitamos contribuições! Siga estes passos:
 
-1. Fork the project  
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)  
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)  
-4. Push to the branch (`git push origin feature/amazing-feature`)  
-5. Open a Pull Request  
+1. Faça um fork do projeto  
+2. Crie sua branch de funcionalidade (`git checkout -b feature/minha-funcionalidade`)  
+3. Commit suas alterações (`git commit -m 'Adiciona nova funcionalidade'`)  
+4. Faça push para a branch (`git push origin feature/minha-funcionalidade`)  
+5. Abra um Pull Request  
 
-## 📄 License
+## 📄 Licença
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
 ---
 
-Crafted with 🧠 by [Tetri Mesquita](https://tetri.net)
+Criado com 🧠 por [Tetri Mesquita](https://tetri.net)

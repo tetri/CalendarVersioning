@@ -2,20 +2,21 @@
 
 ## Supported Versions
 
-Use this section to tell people about which versions of your project are
-currently being supported with security updates.
+Only the latest stable release published on [NuGet](https://www.nuget.org/packages/tetri.net.CalendarVersioning/) receives security updates.
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 5.1.x   | :white_check_mark: |
-| 5.0.x   | :x:                |
-| 4.0.x   | :white_check_mark: |
-| < 4.0   | :x:                |
+| Latest  | ✅                 |
+| < Latest| ❌                 |
 
 ## Reporting a Vulnerability
 
-Use this section to tell people how to report a vulnerability.
+If you discover a security vulnerability, please open an [issue](https://github.com/tetri/CalendarVersioning/issues) with the label `security`. Do not disclose the vulnerability publicly until it has been addressed.
 
-Tell them where to go, how often they can expect to get an update on a
-reported vulnerability, what to expect if the vulnerability is accepted or
-declined, etc.
+You can expect an initial response within 5 business days. Once triaged, we will work on a fix and publish a new patch version as soon as possible.
+
+## Security Measures
+
+- **Input validation:** All `Parse` methods validate input length (max 256 characters) and limit the number of components to prevent DoS via excessive memory allocation.
+- **Overflow protection:** `TryParse` catches `OverflowException` to safely handle out-of-range numeric values.
+- **Immutability:** `CalendarVersion` instances are immutable, preventing accidental or malicious state modification after creation.
