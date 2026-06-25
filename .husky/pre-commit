@@ -1,0 +1,1 @@
+dotnet build --no-restore --verbosity quiet && dotnet test --no-build --verbosity quiet
