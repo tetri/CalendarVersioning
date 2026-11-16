@@ -86,3 +86,8 @@ __pycache__/
 
 # JetBrains Rider
 .idea
+# AI Agents & Tools
+.gemini/
+.trail/
+GEMINI.md
+opencode.json

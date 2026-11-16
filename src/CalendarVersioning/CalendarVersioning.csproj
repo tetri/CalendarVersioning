@@ -1,7 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<LangVersion>11.0</LangVersion>
-		<TargetFramework>net9.0</TargetFramework>
+		<TargetFrameworks>net9.0;net10.0</TargetFrameworks>
+		<SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
 		<Nullable>enable</Nullable>
 		<PackageId>tetri.net.CalendarVersioning</PackageId>
 		<Authors>Tetri Mesquita</Authors>
